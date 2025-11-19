@@ -1,0 +1,49 @@
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-top: 2rem;
+}
+
+.title {
+  font-family: 'Inter', sans-serif;
+  font-size: 5rem;
+  font-weight: 900;
+  margin: 0;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.human {
+  color: transparent;
+  -webkit-text-stroke: 2px #00FFFF;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.vs {
+  font-size: 3rem;
+  color: #fff;
+  font-style: italic;
+  font-family: serif;
+}
+
+.ai {
+  background: linear-gradient(180deg, #00FFFF 0%, #0088FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.subtitle {
+  font-family: 'Inter', sans-serif;
+  color: #e0e0e0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+}

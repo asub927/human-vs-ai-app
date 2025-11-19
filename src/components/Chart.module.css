@@ -1,0 +1,193 @@
+.chartContainer {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    /* Ensure absolute children position correctly */
+}
+
+/* Renamed from .legendItems to match JSX */
+.legendContainer {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    /* Reserve space for bubbles */
+    margin-bottom: 1rem;
+    /* Added margin to separate from chart */
+}
+
+.legendItem {
+    position: absolute;
+    top: 0;
+    /* Reset top, let it sit in the container */
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 0;
+    overflow: visible;
+    z-index: 10;
+    /* Ensure it's on top */
+}
+
+.legendBoxAi {
+    background-color: #00FFFF;
+    color: #000;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    transition: transform 0.3s ease;
+}
+
+.legendBoxHuman {
+    border: 2px solid #00FFFF;
+    color: #00FFFF;
+    background-color: #000;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    transition: transform 0.3s ease;
+}
+
+/* Independent Arrows */
+.legendArrowAi {
+    width: 12px;
+    height: 12px;
+    background-color: #00FFFF;
+    transform: rotate(45deg);
+    margin-top: -6px;
+    position: relative;
+    z-index: 10;
+}
+
+.legendArrowHuman {
+    width: 12px;
+    height: 12px;
+    background-color: #000;
+    border-right: 2px solid #00FFFF;
+    border-bottom: 2px solid #00FFFF;
+    transform: rotate(45deg);
+    margin-top: -6px;
+    position: relative;
+    z-index: 10;
+}
+
+/* Offset classes for overlapping labels */
+.labelOffsetUp {
+    transform: translateY(-150%) !important;
+    /* Move up */
+}
+
+.labelOffsetDown {
+    transform: translateY(50%) !important;
+    /* Move down */
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    height: 40px;
+}
+
+.label {
+    width: 200px;
+    text-align: right;
+    padding-right: 4rem;
+    /* Increased from 1.5rem to prevent overlap */
+    font-size: 0.9rem;
+    color: #e0e0e0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #0088FF;
+    font-size: 1.2rem;
+    background: rgba(0, 51, 102, 0.2);
+    border-radius: 8px;
+    border: 1px dashed rgba(0, 255, 255, 0.3);
+}
+
+.emptyState p {
+    margin: 0.5rem 0;
+}
+
+.barContainer {
+    flex: 1;
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.connectingLine {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, #00FFFF 0%, #0088FF 100%);
+    box-shadow: 0 0 5px #00FFFF;
+}
+
+.aiDot {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #00FFFF;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px #00FFFF;
+    z-index: 2;
+}
+
+.humanDot {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: transparent;
+    border: 2px solid #0088FF;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.timeLabelAi {
+    color: #00FFFF;
+    font-weight: 700;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.timeLabelHuman {
+    color: #0088FF;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.labelLeft {
+    position: absolute;
+    right: 25px;
+    /* Position to the left of the dot */
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: right;
+}
+
+.labelRight {
+    position: absolute;
+    left: 25px;
+    /* Position to the right of the dot */
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: left;
+}
