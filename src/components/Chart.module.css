@@ -11,7 +11,10 @@
 /* Renamed from .legendItems to match JSX */
 .legendContainer {
     position: relative;
-    width: 100%;
+    width: calc(100% - 340px);
+    /* Match bar area width */
+    margin-left: 340px;
+    /* Offset by label column width */
     height: 60px;
     /* Reserve space for bubbles */
     margin-bottom: 1rem;

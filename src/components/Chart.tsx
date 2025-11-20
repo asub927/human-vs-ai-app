@@ -13,27 +13,14 @@ const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
     const aiDotPercent = (firstTaskAiTime / maxTime) * 100;
     const humanDotPercent = (firstTaskHumanTime / maxTime) * 100;
 
-    // Account for the task label area offset (Project + Task)
-    // The legend container spans the full width (900px max)
-    // But the bar container starts after the labels (300px: 120px Project + 180px Task)
-    // So we need to offset the legend positions by this amount
-    const LABEL_AREA_WIDTH = 300; // pixels (increased from 200)
-    const CONTAINER_MAX_WIDTH = 900; // pixels  
-    const LABEL_AREA_OFFSET_PERCENT = (LABEL_AREA_WIDTH / CONTAINER_MAX_WIDTH) * 100; // ~33.33%
-
-    // The bar container is 700px wide (900 - 200)
-    // The dot percentages are relative to this 700px width
-    // To convert to full container percentage: (dotPercent * 700/900) + offset
-    const BAR_WIDTH_RATIO = (CONTAINER_MAX_WIDTH - LABEL_AREA_WIDTH) / CONTAINER_MAX_WIDTH; // 700/900 = 0.7778
-
     // Calculate legend positions accounting for the offset
-    const aiLegendPosition = LABEL_AREA_OFFSET_PERCENT + (aiDotPercent * BAR_WIDTH_RATIO);
-    const humanLegendPosition = LABEL_AREA_OFFSET_PERCENT + (humanDotPercent * BAR_WIDTH_RATIO);
+    const aiLegendPosition = aiDotPercent;
+    const humanLegendPosition = humanDotPercent;
 
     // Legend Collision Detection
     // If the legend positions are close, the legends (which are wide) might overlap.
     const percentDiff = Math.abs(aiLegendPosition - humanLegendPosition);
-    const isLegendOverlapping = percentDiff < 50; // Increased threshold for legend overlap
+    const isLegendOverlapping = percentDiff < 30; // Reduced threshold for legend overlap
 
     let aiLegendShift = 0;
     let humanLegendShift = 0;
