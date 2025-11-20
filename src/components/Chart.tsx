@@ -5,25 +5,13 @@ import styles from './Chart.module.css';
 const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
     const maxTime = Math.max(...data.map(d => Math.max(d.humanTime, d.aiTime)), 1);
 
-    // Calculate legend positions based on median values across all tasks
-    // This provides a more stable reference point than using just the first task
-    const calculateMedian = (values: number[]): number => {
-        if (values.length === 0) return 0;
-        const sorted = [...values].sort((a, b) => a - b);
-        const mid = Math.floor(sorted.length / 2);
-        return sorted.length % 2 === 0
-            ? (sorted[mid - 1] + sorted[mid]) / 2
-            : sorted[mid];
-    };
+    // Calculate legend positions based on the first task's values
+    // This aligns the legends with the data labels of the first task
+    const firstTaskAiTime = data.length > 0 ? data[0].aiTime : 0;
+    const firstTaskHumanTime = data.length > 0 ? data[0].humanTime : 0;
 
-    const aiTimes = data.map(d => d.aiTime);
-    const humanTimes = data.map(d => d.humanTime);
-
-    const medianAiTime = calculateMedian(aiTimes);
-    const medianHumanTime = calculateMedian(humanTimes);
-
-    const aiDotPercent = (medianAiTime / maxTime) * 100;
-    const humanDotPercent = (medianHumanTime / maxTime) * 100;
+    const aiDotPercent = (firstTaskAiTime / maxTime) * 100;
+    const humanDotPercent = (firstTaskHumanTime / maxTime) * 100;
 
     // Account for the task label area offset
     // The legend container spans the full width (900px max)
@@ -45,19 +33,19 @@ const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
     // Legend Collision Detection
     // If the legend positions are close, the legends (which are wide) might overlap.
     const percentDiff = Math.abs(aiLegendPosition - humanLegendPosition);
-    const isLegendOverlapping = percentDiff < 40; // Threshold for legend overlap
+    const isLegendOverlapping = percentDiff < 50; // Increased threshold for legend overlap
 
     let aiLegendShift = 0;
     let humanLegendShift = 0;
 
     if (isLegendOverlapping) {
-        // Shift away from each other
+        // Shift away from each other with much more aggressive distance
         if (aiLegendPosition < humanLegendPosition) {
-            aiLegendShift = -15; // Shift AI left
-            humanLegendShift = 15; // Shift Human right
+            aiLegendShift = -40; // Shift AI left (very aggressive)
+            humanLegendShift = 40; // Shift Human right (very aggressive)
         } else {
-            aiLegendShift = 15; // Shift AI right
-            humanLegendShift = -15; // Shift Human left
+            aiLegendShift = 40; // Shift AI right (very aggressive)
+            humanLegendShift = -40; // Shift Human left (very aggressive)
         }
     }
 
@@ -77,7 +65,7 @@ const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
                             className={styles.legendBoxAi}
                             style={{ transform: `translateX(${aiLegendShift}%)` }}
                         >
-                            With Generative AI
+                            With AI Assistance
                         </div>
                         <div className={styles.legendArrowAi}></div>
                     </div>
@@ -94,7 +82,7 @@ const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
                             className={styles.legendBoxHuman}
                             style={{ transform: `translateX(${humanLegendShift}%)` }}
                         >
-                            Without Generative AI
+                            Without AI
                         </div>
                         <div className={styles.legendArrowHuman}></div>
                     </div>
@@ -106,16 +94,22 @@ const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
                 {data.length === 0 ? (
                     <div className={styles.emptyState}>
                         <p>No tasks yet.</p>
-                        <p>Enter a task above to see the Human vs AI time comparison.</p>
+                        <p>Enter a task above to see the productivity boost with AI.</p>
                     </div>
                 ) : (
                     data.map((item, index) => {
                         const humanPercent = (item.humanTime / maxTime) * 100;
                         const aiPercent = (item.aiTime / maxTime) * 100;
 
-                        // Check for overlap
-                        // If values are close (e.g. within 10% of maxTime), labels might overlap
+                        // Check for overlap between labels
+                        // If values are close (e.g. within 12% of maxTime), labels might overlap
                         const isOverlapping = Math.abs(humanPercent - aiPercent) < 12;
+
+                        // Check if labels are too close to the horizontal chart line
+                        // Small percentage values position labels near the line, causing overlap
+                        const CHART_LINE_THRESHOLD = 25; // Increased to 25% with safety margin
+                        const aiNearLine = aiPercent < CHART_LINE_THRESHOLD;
+                        const humanNearLine = humanPercent < CHART_LINE_THRESHOLD;
 
                         // Minimum percentage threshold to prevent labels from going into task name area
                         // If a value is less than 25%, it might overlap with task names when positioned left
@@ -193,7 +187,7 @@ const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
                                         style={{ left: `${aiPercent}%` }}
                                     >
                                         <span
-                                            className={`${styles.timeLabelAi} ${aiLabelClass} ${isOverlapping ? styles.labelOffsetUp : ''}`}
+                                            className={`${styles.timeLabelAi} ${aiLabelClass} ${(isOverlapping || aiNearLine) ? styles.labelOffsetUp : ''}`}
                                         >
                                             {item.aiTime} min
                                         </span>
@@ -205,7 +199,7 @@ const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
                                         style={{ left: `${humanPercent}%` }}
                                     >
                                         <span
-                                            className={`${styles.timeLabelHuman} ${humanLabelClass} ${isOverlapping ? styles.labelOffsetDown : ''}`}
+                                            className={`${styles.timeLabelHuman} ${humanLabelClass} ${(isOverlapping || humanNearLine) ? styles.labelOffsetDown : ''}`}
                                         >
                                             {item.humanTime} min
                                         </span>

@@ -21,8 +21,12 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
                 return;
             }
 
+
+            // Convert task name to sentence case (capitalize first letter, lowercase rest)
+            const formattedTask = task.charAt(0).toUpperCase() + task.slice(1).toLowerCase();
+
             const newTask: TaskData = {
-                task,
+                task: formattedTask,
                 humanTime: hTime,
                 aiTime: aTime,
             };
@@ -38,7 +42,7 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
         <form className={styles.form} onSubmit={handleSubmit}>
             <input
                 type="text"
-                placeholder="Task Name"
+                placeholder="Activity Description"
                 value={task}
                 onChange={(e) => setTask(e.target.value)}
                 className={styles.input}
@@ -46,7 +50,7 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
             />
             <input
                 type="number"
-                placeholder="Human Time (min)"
+                placeholder="Without AI (min)"
                 value={humanTime}
                 onChange={(e) => setHumanTime(e.target.value)}
                 className={styles.input}
@@ -55,7 +59,7 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
             />
             <input
                 type="number"
-                placeholder="AI Time (min)"
+                placeholder="With AI Assistance (min)"
                 value={aiTime}
                 onChange={(e) => setAiTime(e.target.value)}
                 className={styles.input}

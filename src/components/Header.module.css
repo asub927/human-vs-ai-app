@@ -6,7 +6,7 @@
 
 .title {
   font-family: 'Inter', sans-serif;
-  font-size: 5rem;
+  font-size: 3.5rem;
   font-weight: 900;
   margin: 0;
   line-height: 1;
@@ -40,10 +40,12 @@
 
 .subtitle {
   font-family: 'Inter', sans-serif;
-  color: #e0e0e0;
-  font-size: 2.5rem;
+  background: linear-gradient(90deg, #00FFFF 0%, #0088FF 50%, #00FFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.2rem;
   font-weight: 700;
   margin-top: 0.5rem;
-  text-transform: capitalize;
   letter-spacing: 1px;
 }

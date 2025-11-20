@@ -78,15 +78,16 @@
     z-index: 10;
 }
 
+
 /* Offset classes for overlapping labels */
 .labelOffsetUp {
-    transform: translateY(-150%) !important;
-    /* Move up */
+    transform: translateY(-200%) !important;
+    /* Move up - increased for more clearance */
 }
 
 .labelOffsetDown {
-    transform: translateY(50%) !important;
-    /* Move down */
+    transform: translateY(100%) !important;
+    /* Move down - increased for more clearance */
 }
 
 .row {
@@ -95,8 +96,8 @@
     margin-bottom: 0;
     min-height: 40px;
     padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    /* Horizontal grid line spanning full width - increased opacity */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    /* Horizontal grid line spanning full width - table-like appearance */
 }
 
 .labelContainer {

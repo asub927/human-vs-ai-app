@@ -5,11 +5,11 @@ const Header: React.FC = () => {
     return (
         <header className={styles.header}>
             <h1 className={styles.title}>
-                <span className={styles.human}>HUMAN</span>
-                <span className={styles.vs}>Vs</span>
-                <span className={styles.ai}>AI</span>
+                <span className={styles.ai}>Ai</span>
+                <span className={styles.vs}>Productivity</span>
+                <span className={styles.human}>Boost</span>
             </h1>
-            <h2 className={styles.subtitle}>Time to Complete Tasks</h2>
+            <h2 className={styles.subtitle}>Compare task completion times with and without AI</h2>
         </header>
     );
 };
