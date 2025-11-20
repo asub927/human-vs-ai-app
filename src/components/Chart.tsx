@@ -13,13 +13,13 @@ const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
     const aiDotPercent = (firstTaskAiTime / maxTime) * 100;
     const humanDotPercent = (firstTaskHumanTime / maxTime) * 100;
 
-    // Account for the task label area offset
+    // Account for the task label area offset (Project + Task)
     // The legend container spans the full width (900px max)
-    // But the bar container starts after the task labels (200px)
+    // But the bar container starts after the labels (300px: 120px Project + 180px Task)
     // So we need to offset the legend positions by this amount
-    const LABEL_AREA_WIDTH = 200; // pixels
+    const LABEL_AREA_WIDTH = 300; // pixels (increased from 200)
     const CONTAINER_MAX_WIDTH = 900; // pixels  
-    const LABEL_AREA_OFFSET_PERCENT = (LABEL_AREA_WIDTH / CONTAINER_MAX_WIDTH) * 100; // ~22.22%
+    const LABEL_AREA_OFFSET_PERCENT = (LABEL_AREA_WIDTH / CONTAINER_MAX_WIDTH) * 100; // ~33.33%
 
     // The bar container is 700px wide (900 - 200)
     // The dot percentages are relative to this 700px width
@@ -97,121 +97,133 @@ const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
                         <p>Enter a task above to see the productivity boost with AI.</p>
                     </div>
                 ) : (
-                    data.map((item, index) => {
-                        const humanPercent = (item.humanTime / maxTime) * 100;
-                        const aiPercent = (item.aiTime / maxTime) * 100;
-
-                        // Check for overlap between labels
-                        // If values are close (e.g. within 12% of maxTime), labels might overlap
-                        const isOverlapping = Math.abs(humanPercent - aiPercent) < 12;
-
-                        // Check if labels are too close to the horizontal chart line
-                        // Small percentage values position labels near the line, causing overlap
-                        const CHART_LINE_THRESHOLD = 25; // Increased to 25% with safety margin
-                        const aiNearLine = aiPercent < CHART_LINE_THRESHOLD;
-                        const humanNearLine = humanPercent < CHART_LINE_THRESHOLD;
-
-                        // Minimum percentage threshold to prevent labels from going into task name area
-                        // If a value is less than 25%, it might overlap with task names when positioned left
-                        const MIN_PERCENT_FOR_LEFT_LABEL = 25;
-
-                        // Determine label positions
-                        // Strategy: Smaller value on LEFT, larger on RIGHT, unless value is too small
-                        // Special case: if BOTH are below threshold, still use left/right to avoid overlap
-                        let aiLabelClass = styles.labelRight;
-                        let humanLabelClass = styles.labelLeft;
-
-                        const aiTooSmall = aiPercent < MIN_PERCENT_FOR_LEFT_LABEL;
-                        const humanTooSmall = humanPercent < MIN_PERCENT_FOR_LEFT_LABEL;
-
-                        if (aiPercent < humanPercent) {
-                            // AI is smaller
-                            if (aiTooSmall && !humanTooSmall) {
-                                // Only AI is too small - force it RIGHT, Human stays RIGHT
-                                aiLabelClass = styles.labelRight;
-                                humanLabelClass = styles.labelRight;
-                            } else {
-                                // Normal case or both too small - use standard positioning
-                                aiLabelClass = styles.labelLeft;
-                                humanLabelClass = styles.labelRight;
-                            }
-                        } else if (aiPercent > humanPercent) {
-                            // Human is smaller
-                            if (humanTooSmall && !aiTooSmall) {
-                                // Only Human is too small - force it RIGHT, AI stays RIGHT
-                                aiLabelClass = styles.labelRight;
-                                humanLabelClass = styles.labelRight;
-                            } else {
-                                // Normal case or both too small - use standard positioning
-                                aiLabelClass = styles.labelRight;
-                                humanLabelClass = styles.labelLeft;
-                            }
-                        } else {
-                            // Equal values - default to AI left, Human right (unless both too small)
-                            if (aiTooSmall) {
-                                // Both are equal and too small - both go RIGHT
-                                aiLabelClass = styles.labelRight;
-                                humanLabelClass = styles.labelRight;
-                            } else {
-                                aiLabelClass = styles.labelLeft;
-                                humanLabelClass = styles.labelRight;
-                            }
-                        }
-
-                        return (
-                            <div key={index} className={styles.row}>
-                                <div className={styles.labelContainer}>
-                                    <div className={styles.label}>{item.task}</div>
-                                    <button
-                                        className={styles.deleteButton}
-                                        onClick={() => onDeleteTask(index)}
-                                        aria-label={`Delete ${item.task}`}
-                                        title="Delete task"
-                                    >
-                                        ×
-                                    </button>
-                                </div>
-                                <div className={styles.barContainer}>
-                                    {/* Connecting Line */}
-                                    <div
-                                        className={styles.connectingLine}
-                                        style={{
-                                            left: `${Math.min(humanPercent, aiPercent)}%`,
-                                            width: `${Math.abs(humanPercent - aiPercent)}%`
-                                        }}
-                                    ></div>
-
-                                    {/* AI Dot */}
-                                    <div
-                                        className={styles.aiDot}
-                                        style={{ left: `${aiPercent}%` }}
-                                    >
-                                        <span
-                                            className={`${styles.timeLabelAi} ${aiLabelClass} ${(isOverlapping || aiNearLine) ? styles.labelOffsetUp : ''}`}
-                                        >
-                                            {item.aiTime} min
-                                        </span>
-                                    </div>
-
-                                    {/* Human Dot */}
-                                    <div
-                                        className={styles.humanDot}
-                                        style={{ left: `${humanPercent}%` }}
-                                    >
-                                        <span
-                                            className={`${styles.timeLabelHuman} ${humanLabelClass} ${(isOverlapping || humanNearLine) ? styles.labelOffsetDown : ''}`}
-                                        >
-                                            {item.humanTime} min
-                                        </span>
-                                    </div>
-                                </div>
+                    <>
+                        {/* Header Row */}
+                        <div className={styles.headerRow}>
+                            <div className={styles.labelContainer}>
+                                <div className={styles.headerProjectLabel}>PROJECT</div>
+                                <div className={styles.headerTaskLabel}>ACTIVITY</div>
                             </div>
-                        );
-                    })
+                            <div className={styles.barContainer}>
+                                <div className={styles.headerTimeLabel}>TIME COMPARISON</div>
+                            </div>
+                        </div>
+                        {data.map((item, index) => {
+                            const humanPercent = (item.humanTime / maxTime) * 100;
+                            const aiPercent = (item.aiTime / maxTime) * 100;
+
+                            // Check for overlap between labels
+                            // If values are close (e.g. within 12% of maxTime), labels might overlap
+                            const isOverlapping = Math.abs(humanPercent - aiPercent) < 12;
+
+                            // Check if labels are too close to the horizontal chart line
+                            // Small percentage values position labels near the line, causing overlap
+                            const CHART_LINE_THRESHOLD = 25; // Increased to 25% with safety margin
+                            const aiNearLine = aiPercent < CHART_LINE_THRESHOLD;
+                            const humanNearLine = humanPercent < CHART_LINE_THRESHOLD;
+
+                            // Minimum percentage threshold to prevent labels from going into task name area
+                            // If a value is less than 25%, it might overlap with task names when positioned left
+                            const MIN_PERCENT_FOR_LEFT_LABEL = 25;
+
+                            // Determine label positions
+                            // Strategy: Smaller value on LEFT, larger on RIGHT, unless value is too small
+                            // Special case: if BOTH are below threshold, still use left/right to avoid overlap
+                            let aiLabelClass = styles.labelRight;
+                            let humanLabelClass = styles.labelLeft;
+
+                            const aiTooSmall = aiPercent < MIN_PERCENT_FOR_LEFT_LABEL;
+                            const humanTooSmall = humanPercent < MIN_PERCENT_FOR_LEFT_LABEL;
+
+                            if (aiPercent < humanPercent) {
+                                // AI is smaller
+                                if (aiTooSmall && !humanTooSmall) {
+                                    // Only AI is too small - force it RIGHT, Human stays RIGHT
+                                    aiLabelClass = styles.labelRight;
+                                    humanLabelClass = styles.labelRight;
+                                } else {
+                                    // Normal case or both too small - use standard positioning
+                                    aiLabelClass = styles.labelLeft;
+                                    humanLabelClass = styles.labelRight;
+                                }
+                            } else if (aiPercent > humanPercent) {
+                                // Human is smaller
+                                if (humanTooSmall && !aiTooSmall) {
+                                    // Only Human is too small - force it RIGHT, AI stays RIGHT
+                                    aiLabelClass = styles.labelRight;
+                                    humanLabelClass = styles.labelRight;
+                                } else {
+                                    // Normal case or both too small - use standard positioning
+                                    aiLabelClass = styles.labelRight;
+                                    humanLabelClass = styles.labelLeft;
+                                }
+                            } else {
+                                // Equal values - default to AI left, Human right (unless both too small)
+                                if (aiTooSmall) {
+                                    // Both are equal and too small - both go RIGHT
+                                    aiLabelClass = styles.labelRight;
+                                    humanLabelClass = styles.labelRight;
+                                } else {
+                                    aiLabelClass = styles.labelLeft;
+                                    humanLabelClass = styles.labelRight;
+                                }
+                            }
+
+                            return (
+                                <div key={index} className={styles.row}>
+                                    <div className={styles.labelContainer}>
+                                        <div className={styles.projectLabel}>{item.projectName}</div>
+                                        <div className={styles.taskLabel}>{item.task}</div>
+                                        <button
+                                            className={styles.deleteButton}
+                                            onClick={() => onDeleteTask(index)}
+                                            aria-label={`Delete ${item.task}`}
+                                            title="Delete task"
+                                        >
+                                            ×
+                                        </button>
+                                    </div>
+                                    <div className={styles.barContainer}>
+                                        {/* Connecting Line */}
+                                        <div
+                                            className={styles.connectingLine}
+                                            style={{
+                                                left: `${Math.min(humanPercent, aiPercent)}%`,
+                                                width: `${Math.abs(humanPercent - aiPercent)}%`
+                                            }}
+                                        ></div>
+
+                                        {/* AI Dot */}
+                                        <div
+                                            className={styles.aiDot}
+                                            style={{ left: `${aiPercent}%` }}
+                                        >
+                                            <span
+                                                className={`${styles.timeLabelAi} ${aiLabelClass} ${(isOverlapping || aiNearLine) ? styles.labelOffsetUp : ''}`}
+                                            >
+                                                {item.aiTime} min
+                                            </span>
+                                        </div>
+
+                                        {/* Human Dot */}
+                                        <div
+                                            className={styles.humanDot}
+                                            style={{ left: `${humanPercent}%` }}
+                                        >
+                                            <span
+                                                className={`${styles.timeLabelHuman} ${humanLabelClass} ${(isOverlapping || humanNearLine) ? styles.labelOffsetDown : ''}`}
+                                            >
+                                                {item.humanTime} min
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })
                 )}
+                    </div>
             </div>
-        </div>
-    );
+            );
 };
 
-export default Chart;
+            export default Chart;

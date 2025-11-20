@@ -3,6 +3,7 @@ import { InputFormProps, TaskData } from '../types';
 import styles from './InputForm.module.css';
 
 const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
+    const [projectName, setProjectName] = useState<string>('');
     const [task, setTask] = useState<string>('');
     const [humanTime, setHumanTime] = useState<string>('');
     const [aiTime, setAiTime] = useState<string>('');
@@ -12,7 +13,7 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
         e.preventDefault();
         setError('');
 
-        if (task && humanTime && aiTime) {
+        if (projectName && task && humanTime && aiTime) {
             const hTime = parseInt(humanTime);
             const aTime = parseInt(aiTime);
 
@@ -26,12 +27,14 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
             const formattedTask = task.charAt(0).toUpperCase() + task.slice(1).toLowerCase();
 
             const newTask: TaskData = {
+                projectName,
                 task: formattedTask,
                 humanTime: hTime,
                 aiTime: aTime,
             };
 
             onAddTask(newTask);
+            setProjectName('');
             setTask('');
             setHumanTime('');
             setAiTime('');
@@ -40,6 +43,14 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
 
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
+            <input
+                type="text"
+                placeholder="Project Name"
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                className={styles.input}
+                required
+            />
             <input
                 type="text"
                 placeholder="Activity Description"

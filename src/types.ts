@@ -2,6 +2,7 @@
  * Represents a task with time comparisons between human and AI completion
  */
 export interface TaskData {
+    projectName: string;
     task: string;
     humanTime: number;
     aiTime: number;
