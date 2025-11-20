@@ -2,14 +2,28 @@ import React from 'react';
 import { ChartProps, TaskData } from '../types';
 import styles from './Chart.module.css';
 
-const Chart: React.FC<ChartProps> = ({ data }) => {
+const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
     const maxTime = Math.max(...data.map(d => Math.max(d.humanTime, d.aiTime)), 1);
 
-    // Calculate positions for the first task (for the legend)
-    // We use the first task's data to position the legends
-    const firstTask: TaskData = data.length > 0 ? data[0] : { task: '', aiTime: 0, humanTime: 0 };
-    const aiDotPercent = (firstTask.aiTime / maxTime) * 100;
-    const humanDotPercent = (firstTask.humanTime / maxTime) * 100;
+    // Calculate legend positions based on median values across all tasks
+    // This provides a more stable reference point than using just the first task
+    const calculateMedian = (values: number[]): number => {
+        if (values.length === 0) return 0;
+        const sorted = [...values].sort((a, b) => a - b);
+        const mid = Math.floor(sorted.length / 2);
+        return sorted.length % 2 === 0
+            ? (sorted[mid - 1] + sorted[mid]) / 2
+            : sorted[mid];
+    };
+
+    const aiTimes = data.map(d => d.aiTime);
+    const humanTimes = data.map(d => d.humanTime);
+
+    const medianAiTime = calculateMedian(aiTimes);
+    const medianHumanTime = calculateMedian(humanTimes);
+
+    const aiDotPercent = (medianAiTime / maxTime) * 100;
+    const humanDotPercent = (medianHumanTime / maxTime) * 100;
 
     // Account for the task label area offset
     // The legend container spans the full width (900px max)
@@ -152,7 +166,17 @@ const Chart: React.FC<ChartProps> = ({ data }) => {
 
                         return (
                             <div key={index} className={styles.row}>
-                                <div className={styles.label}>{item.task}</div>
+                                <div className={styles.labelContainer}>
+                                    <div className={styles.label}>{item.task}</div>
+                                    <button
+                                        className={styles.deleteButton}
+                                        onClick={() => onDeleteTask(index)}
+                                        aria-label={`Delete ${item.task}`}
+                                        title="Delete task"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
                                 <div className={styles.barContainer}>
                                     {/* Connecting Line */}
                                     <div

@@ -12,6 +12,7 @@ export interface TaskData {
  */
 export interface ChartProps {
     data: TaskData[];
+    onDeleteTask: (index: number) => void;
 }
 
 /**

@@ -99,19 +99,52 @@
     /* Horizontal grid line spanning full width - increased opacity */
 }
 
-.label {
+.labelContainer {
     width: 200px;
-    text-align: right;
-    padding-right: 4rem;
-    font-size: 0.9rem;
-    color: #e0e0e0;
-    word-wrap: break-word;
-    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    gap: 0.5rem;
+    padding-right: 1rem;
+    flex-shrink: 0;
     border-right: 1px solid rgba(255, 255, 255, 0.3);
     /* Vertical separator between task names and chart - increased opacity */
+    position: relative;
+}
+
+.label {
+    text-align: right;
+    font-size: 0.9rem;
+    color: #e0e0e0;
+    word-wrap: break-word;
+    flex: 1;
+}
+
+.deleteButton {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    line-height: 1;
+}
+
+.deleteButton:hover {
+    color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
+    transform: scale(1.1);
+}
+
+.deleteButton:active {
+    transform: scale(0.95);
 }
 
 .emptyState {
@@ -181,7 +214,7 @@
 
 .labelLeft {
     position: absolute;
-    right: 25px;
+    right: 65px;
     /* Position to the left of the dot */
     top: 50%;
     transform: translateY(-50%);
@@ -196,7 +229,7 @@
 
 .labelRight {
     position: absolute;
-    left: 25px;
+    left: 20px;
     /* Position to the right of the dot */
     top: 50%;
     transform: translateY(-50%);
