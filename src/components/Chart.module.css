@@ -100,53 +100,6 @@
     /* Horizontal grid line spanning full width - table-like appearance */
 }
 
-.headerRow {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0;
-    min-height: 40px;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-    border-top: 1px solid rgba(255, 255, 255, 0.5);
-    /* Top border to close the table */
-    background: rgba(255, 255, 255, 0.02);
-    /* Subtle background for header */
-}
-
-.headerProjectLabel {
-    width: 120px;
-    text-align: left;
-    font-size: 0.8rem;
-    color: #888;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding-left: 1rem;
-    padding-right: 0.5rem;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-    height: 100%;
-    display: flex;
-    align-items: center;
-}
-
-.headerTaskLabel {
-    width: 180px;
-    text-align: right;
-    font-size: 0.8rem;
-    color: #888;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding-right: 1rem;
-    padding-left: 0.5rem;
-}
-
-.headerTimeLabel {
-    padding-left: 2rem;
-    font-size: 0.8rem;
-    color: #888;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
 .labelContainer {
     width: 300px;
     /* Increased from 200px */
@@ -162,7 +115,7 @@
 }
 
 .projectLabel {
-    width: 120px;
+    width: 150px;
     text-align: left;
     font-size: 0.9rem;
     color: #a0a0a0;
@@ -182,7 +135,7 @@
 }
 
 .taskLabel {
-    width: 180px;
+    width: 150px;
     text-align: right;
     font-size: 0.9rem;
     color: #e0e0e0;
