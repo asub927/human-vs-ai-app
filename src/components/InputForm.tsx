@@ -86,25 +86,25 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
                     </select>
                 </div>
                 <div className={styles.inputGroup}>
-                    <label className={styles.label}>Human + AI</label>
+                    <label className={styles.label} style={{ color: 'var(--color-secondary)' }}>Human + AI</label>
                     <input
                         type="number"
                         placeholder="Enter time in minutes"
                         value={aiTime}
                         onChange={(e) => setAiTime(e.target.value)}
-                        className={styles.input}
+                        className={`${styles.input} ${styles.inputAi}`}
                         min="0"
                         required
                     />
                 </div>
                 <div className={styles.inputGroup}>
-                    <label className={styles.label}>Human Only</label>
+                    <label className={styles.label} style={{ color: 'var(--color-primary)' }}>Human Only</label>
                     <input
                         type="number"
                         placeholder="Enter time in minutes"
                         value={humanTime}
                         onChange={(e) => setHumanTime(e.target.value)}
-                        className={styles.input}
+                        className={`${styles.input} ${styles.inputHuman}`}
                         min="0"
                         required
                     />

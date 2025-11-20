@@ -3,7 +3,11 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin-bottom: var(--space-xl);
+  margin-bottom: 2rem;
+  background: var(--color-surface);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
 }
 
 .statsContainer {
@@ -76,11 +80,19 @@
   font-weight: var(--font-medium);
 }
 
+.widgetLabelAi {
+  color: var(--color-secondary);
+}
+
 .widgetValue {
   font-family: var(--font-sans);
   font-weight: var(--font-bold);
   font-size: var(--text-3xl);
   color: var(--color-text-primary);
+}
+
+.widgetValueAi {
+  color: var(--color-secondary);
 }
 
 .efficiencyValue {
