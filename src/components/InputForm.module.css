@@ -59,6 +59,8 @@
     min-width: 0;
     /* Allow flex shrinking if needed */
     transition: border-color var(--transition-fast);
+    text-align: center;
+    /* Center text and placeholder */
 }
 
 .input:focus {

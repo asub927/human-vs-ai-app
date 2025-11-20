@@ -175,30 +175,25 @@ const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
                         const humanTooLarge = humanPercent > MAX_PERCENT_FOR_RIGHT_LABEL;
 
                         // Default Logic: Smaller on Left, Larger on Right
+                        // But maximize placing labels "outside" the interval
                         if (aiPercent < humanPercent) {
-                            if (aiTooSmall && !humanTooSmall) {
-                                aiLabelClass = styles.labelRight;
-                                humanLabelClass = humanTooLarge ? styles.labelLeft : styles.labelRight;
-                            } else {
-                                aiLabelClass = styles.labelLeft;
-                                humanLabelClass = styles.labelRight;
-                            }
-                        } else if (aiPercent > humanPercent) {
-                            if (humanTooSmall && !aiTooSmall) {
-                                humanLabelClass = styles.labelRight;
-                                aiLabelClass = aiTooLarge ? styles.labelLeft : styles.labelRight;
-                            } else {
-                                aiLabelClass = styles.labelRight;
-                                humanLabelClass = styles.labelLeft;
-                            }
+                            // AI Left, Human Right
+                            // Default: AI Left (Outside), Human Right (Outside)
+                            aiLabelClass = styles.labelLeft;
+                            humanLabelClass = styles.labelRight;
+
+                            // Constraints
+                            if (aiTooSmall) aiLabelClass = styles.labelRight; // Must go inward
+                            if (humanTooLarge) humanLabelClass = styles.labelLeft; // Must go inward
                         } else {
-                            if (aiTooSmall) {
-                                aiLabelClass = styles.labelRight;
-                                humanLabelClass = styles.labelRight;
-                            } else {
-                                aiLabelClass = styles.labelLeft;
-                                humanLabelClass = styles.labelRight;
-                            }
+                            // Human Left, AI Right
+                            // Default: Human Left (Outside), AI Right (Outside)
+                            humanLabelClass = styles.labelLeft;
+                            aiLabelClass = styles.labelRight;
+
+                            // Constraints
+                            if (humanTooSmall) humanLabelClass = styles.labelRight; // Must go inward
+                            if (aiTooLarge) aiLabelClass = styles.labelLeft; // Must go inward
                         }
 
                         // OVERRIDE: If any point is too close to the right edge, FORCE it Left

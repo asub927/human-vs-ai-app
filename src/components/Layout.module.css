@@ -5,7 +5,7 @@
 }
 
 .sidebar {
-    width: 260px;
+    width: 200px;
     background-color: var(--color-primary);
     color: var(--color-surface);
     display: flex;
@@ -14,12 +14,39 @@
     transition: width var(--transition-normal);
 }
 
+.sidebarCollapsed {
+    width: 70px;
+}
+
 .sidebarHeader {
     height: 64px;
     display: flex;
     align-items: center;
     padding: 0 var(--space-lg);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: space-between;
+    /* Space between toggle and logo */
+}
+
+.sidebarCollapsed .sidebarHeader {
+    justify-content: center;
+    padding: 0;
+}
+
+.toggleButton {
+    background: none;
+    border: none;
+    color: var(--color-surface);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: color var(--transition-fast);
+}
+
+.toggleButton:hover {
+    color: var(--color-secondary);
 }
 
 .logo {
@@ -27,6 +54,8 @@
     font-weight: var(--font-bold);
     letter-spacing: 0.5px;
     color: var(--color-surface);
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .nav {
@@ -37,9 +66,16 @@
     gap: var(--space-xs);
 }
 
+.sidebarCollapsed .nav {
+    padding: var(--space-lg) var(--space-xs);
+    align-items: center;
+}
+
 .navItem {
     display: flex;
     align-items: center;
+    gap: var(--space-md);
+    /* Space between icon and text */
     padding: var(--space-sm) var(--space-md);
     border-radius: var(--radius-md);
     color: rgba(255, 255, 255, 0.7);
@@ -47,6 +83,15 @@
     font-size: var(--text-sm);
     font-weight: var(--font-medium);
     transition: all var(--transition-fast);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sidebarCollapsed .navItem {
+    justify-content: center;
+    padding: var(--space-sm);
+    width: 40px;
+    height: 40px;
 }
 
 .navItem:hover {
