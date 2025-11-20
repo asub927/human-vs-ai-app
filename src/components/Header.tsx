@@ -24,36 +24,38 @@ const Header: React.FC<HeaderProps> = ({ data }) => {
 
     return (
         <header className={styles.header}>
-            {/* Left Widget: With AI & Efficiency */}
-            <div className={styles.widgetWrapper}>
-                <div className={`${styles.widget} ${styles.widgetAi}`}>
-                    <div className={styles.widgetContent}>
-                        <span className={styles.widgetValue}>{formatTime(totalAiTime)}</span>
-                        {totalAiTime > 0 && (
-                            <span className={styles.efficiencyBadge}>{speedup}x Faster</span>
-                        )}
-                    </div>
-                </div>
-                <span className={styles.widgetLabel}>With AI</span>
-            </div>
-
             <div className={styles.titleContainer}>
                 <h1 className={styles.title}>
-                    <span className={styles.ai}>Ai</span>
-                    <span className={styles.vs}>Productivity</span>
-                    <span className={styles.human}>Boost</span>
+                    <span className={styles.human}>Human</span>
+                    <span className={styles.vs}>vs</span>
+                    <span className={styles.ai}>Human + AI</span>
                 </h1>
-                <h2 className={styles.subtitle}>Compare task completion times with and without AI</h2>
+                <h2 className={styles.subtitle}>Productivity Benchmark</h2>
             </div>
 
-            {/* Right Widget: Without AI */}
-            <div className={styles.widgetWrapper}>
-                <div className={`${styles.widget} ${styles.widgetHuman}`}>
-                    <div className={styles.widgetContent}>
-                        <span className={styles.widgetValue}>{formatTime(totalHumanTime)}</span>
+            <div className={styles.statsContainer}>
+                {/* With AI Widget */}
+                <div className={styles.widgetWrapper}>
+                    <span className={styles.widgetLabel}>Human + AI</span>
+                    <div className={`${styles.widget} ${styles.widgetAi}`}>
+                        <div className={styles.widgetContent}>
+                            <span className={styles.widgetValue}>{formatTime(totalAiTime)}</span>
+                            {totalAiTime > 0 && (
+                                <span className={styles.efficiencyBadge}>{speedup}x Faster</span>
+                            )}
+                        </div>
                     </div>
                 </div>
-                <span className={styles.widgetLabel}>Without AI</span>
+
+                {/* Without AI Widget */}
+                <div className={styles.widgetWrapper}>
+                    <span className={styles.widgetLabel}>Human Only</span>
+                    <div className={`${styles.widget} ${styles.widgetHuman}`}>
+                        <div className={styles.widgetContent}>
+                            <span className={styles.widgetValue}>{formatTime(totalHumanTime)}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
     );

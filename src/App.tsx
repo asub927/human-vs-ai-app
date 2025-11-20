@@ -4,6 +4,7 @@ import Header from './components/Header';
 import InputForm from './components/InputForm';
 import Chart from './components/Chart';
 import ConfirmationModal from './components/ConfirmationModal';
+import Layout from './components/Layout';
 
 const App: React.FC = () => {
     const [data, setData] = useState<TaskData[]>([]);
@@ -31,7 +32,7 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="app-container" style={{ padding: '2rem' }}>
+        <Layout>
             <Header data={data} />
             <InputForm onAddTask={handleAddTask} onClear={handleClearClick} />
             <Chart data={data} onDeleteTask={handleDeleteTask} />
@@ -41,7 +42,7 @@ const App: React.FC = () => {
                 onConfirm={handleConfirmClear}
                 message="Are you sure you want to clear all tasks?"
             />
-        </div>
+        </Layout>
     );
 }
 

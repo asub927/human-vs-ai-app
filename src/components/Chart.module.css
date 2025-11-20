@@ -1,10 +1,15 @@
 .chartContainer {
     width: 100%;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
-    color: var(--mck-text-secondary);
+    color: var(--color-text-secondary);
     font-family: var(--font-sans);
     position: relative;
+    background-color: var(--color-surface);
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--color-border);
 }
 
 .legendContainer {
@@ -12,7 +17,7 @@
     width: calc(100% - 340px);
     margin-left: 340px;
     height: 60px;
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-lg);
 }
 
 .legendItem {
@@ -28,33 +33,35 @@
 }
 
 .legendBoxAi {
-    background-color: var(--mck-cyan);
-    color: #fff;
+    background-color: var(--color-secondary);
+    color: white;
     padding: 6px 12px;
-    border-radius: 2px;
-    font-weight: 600;
-    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-bold);
+    font-size: var(--text-sm);
     white-space: nowrap;
-    transition: transform 0.3s ease;
+    transition: transform var(--transition-normal);
+    box-shadow: var(--shadow-sm);
 }
 
 .legendBoxHuman {
-    border: 1px solid var(--mck-blue);
-    color: var(--mck-blue);
-    background-color: #fff;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    background-color: white;
     padding: 6px 12px;
-    border-radius: 2px;
-    font-weight: 600;
-    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-bold);
+    font-size: var(--text-sm);
     white-space: nowrap;
-    transition: transform 0.3s ease;
+    transition: transform var(--transition-normal);
+    box-shadow: var(--shadow-sm);
 }
 
 /* Independent Arrows */
 .legendArrowAi {
     width: 10px;
     height: 10px;
-    background-color: var(--mck-cyan);
+    background-color: var(--color-secondary);
     transform: rotate(45deg);
     margin-top: -5px;
     position: relative;
@@ -64,15 +71,14 @@
 .legendArrowHuman {
     width: 10px;
     height: 10px;
-    background-color: #fff;
-    border-right: 1px solid var(--mck-blue);
-    border-bottom: 1px solid var(--mck-blue);
+    background-color: white;
+    border-right: 1px solid var(--color-primary);
+    border-bottom: 1px solid var(--color-primary);
     transform: rotate(45deg);
     margin-top: -5px;
     position: relative;
     z-index: 10;
 }
-
 
 /* Offset classes for overlapping labels */
 .labelOffsetUp {
@@ -87,10 +93,9 @@
     display: flex;
     align-items: center;
     margin-bottom: 0;
-    min-height: 40px;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--mck-gray);
-    /* Subtle gray grid line */
+    min-height: 56px;
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .labelContainer {
@@ -101,8 +106,7 @@
     gap: 0;
     padding-right: 0;
     flex-shrink: 0;
-    border-right: 2px solid var(--mck-gray);
-    /* Thicker vertical separator */
+    border-right: 2px solid var(--color-border);
     position: relative;
 }
 
@@ -112,19 +116,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-right: 1px solid var(--mck-gray);
+    border-right: 1px solid var(--color-border);
 }
 
 .projectLabel {
     width: 150px;
     text-align: center;
-    font-size: 0.9rem;
-    color: var(--mck-text-secondary);
-    font-weight: 700;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-bold);
     text-transform: uppercase;
-    padding: 0 0.5rem;
+    padding: 0 var(--space-xs);
     word-wrap: break-word;
-    border-right: 1px solid var(--mck-gray);
+    border-right: 1px solid var(--color-border);
     height: 100%;
     display: flex;
     align-items: center;
@@ -134,15 +138,15 @@
 .taskLabel {
     width: 150px;
     text-align: center;
-    font-size: 0.9rem;
-    color: var(--mck-text-primary);
-    padding: 0 0.5rem;
+    font-size: var(--text-sm);
+    color: var(--color-text-main);
+    padding: 0 var(--space-xs);
     word-wrap: break-word;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 600;
+    font-weight: var(--font-medium);
 }
 
 .barContainer {
@@ -156,8 +160,8 @@
 .deleteButton {
     background: transparent;
     border: none;
-    color: #ccc;
-    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
     cursor: pointer;
     padding: 0;
     width: 24px;
@@ -165,35 +169,34 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
-    border-radius: 4px;
+    transition: all var(--transition-fast);
+    border-radius: var(--radius-sm);
     line-height: 1;
 }
 
 .deleteButton:hover {
-    color: #ff4444;
-    background: rgba(255, 68, 68, 0.1);
+    color: var(--color-danger);
+    background: rgba(211, 47, 47, 0.1);
 }
 
 .emptyState {
     text-align: center;
-    padding: 4rem 2rem;
-    color: var(--mck-text-secondary);
-    font-size: 1.2rem;
-    background: #f9f9f9;
-    border-radius: 8px;
-    border: 1px dashed var(--mck-gray);
+    padding: var(--space-3xl) var(--space-lg);
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
+    background: var(--color-bg-app);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--color-border);
 }
 
 .emptyState p {
-    margin: 0.5rem 0;
+    margin: var(--space-xs) 0;
 }
 
 .connectingLine {
     position: absolute;
     height: 2px;
-    background: #e0e0e0;
-    /* Light gray connection */
+    background: var(--color-border);
     z-index: 1;
 }
 
@@ -201,33 +204,35 @@
     position: absolute;
     width: 14px;
     height: 14px;
-    background: var(--mck-cyan);
+    background: var(--color-secondary);
     border-radius: 50%;
     transform: translateX(-50%);
     z-index: 2;
+    box-shadow: 0 0 0 2px white;
 }
 
 .humanDot {
     position: absolute;
     width: 14px;
     height: 14px;
-    background: var(--mck-blue);
+    background: var(--color-primary);
     border-radius: 50%;
     transform: translateX(-50%);
     z-index: 2;
+    box-shadow: 0 0 0 2px white;
 }
 
 .timeLabelAi {
-    color: var(--mck-cyan);
-    font-weight: 700;
-    font-size: 0.85rem;
+    color: var(--color-secondary);
+    font-weight: var(--font-bold);
+    font-size: var(--text-sm);
     white-space: nowrap;
 }
 
 .timeLabelHuman {
-    color: var(--mck-blue);
-    font-size: 0.85rem;
-    font-weight: 600;
+    color: var(--color-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
     white-space: nowrap;
 }
 

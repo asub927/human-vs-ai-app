@@ -52,7 +52,7 @@ const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
                             className={styles.legendBoxAi}
                             style={{ transform: `translateX(${aiLegendShift}%)` }}
                         >
-                            With AI
+                            Human + AI
                         </div>
                         <div className={styles.legendArrowAi}></div>
                     </div>
@@ -69,7 +69,7 @@ const Chart: React.FC<ChartProps> = ({ data, onDeleteTask }) => {
                             className={styles.legendBoxHuman}
                             style={{ transform: `translateX(${humanLegendShift}%)` }}
                         >
-                            Without AI
+                            Human Only
                         </div>
                         <div className={styles.legendArrowHuman}></div>
                     </div>

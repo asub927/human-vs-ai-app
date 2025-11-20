@@ -43,40 +43,53 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
 
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
-            <input
-                type="text"
-                placeholder="Project Name"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-                className={styles.input}
-                required
-            />
-            <input
-                type="text"
-                placeholder="Activity Description"
-                value={task}
-                onChange={(e) => setTask(e.target.value)}
-                className={styles.input}
-                required
-            />
-            <input
-                type="number"
-                placeholder="With AI (min)"
-                value={aiTime}
-                onChange={(e) => setAiTime(e.target.value)}
-                className={styles.input}
-                min="0"
-                required
-            />
-            <input
-                type="number"
-                placeholder="Without AI (min)"
-                value={humanTime}
-                onChange={(e) => setHumanTime(e.target.value)}
-                className={styles.input}
-                min="0"
-                required
-            />
+            <div className={styles.inputGroup}>
+                <label className={styles.label}>Project Name</label>
+                <input
+                    type="text"
+                    placeholder="e.g. Website Redesign"
+                    value={projectName}
+                    onChange={(e) => setProjectName(e.target.value)}
+                    className={styles.input}
+                    required
+                />
+            </div>
+            <div className={styles.inputGroup}>
+                <label className={styles.label}>Activity</label>
+                <input
+                    type="text"
+                    placeholder="e.g. Create Mockups"
+                    value={task}
+                    onChange={(e) => setTask(e.target.value)}
+                    className={styles.input}
+                    required
+                />
+            </div>
+            <div className={styles.inputGroup}>
+                <label className={styles.label}>Time (Human + AI) (min)</label>
+                <input
+                    type="number"
+                    placeholder="0"
+                    value={aiTime}
+                    onChange={(e) => setAiTime(e.target.value)}
+                    className={styles.input}
+                    min="0"
+                    required
+                />
+            </div>
+            <div className={styles.inputGroup}>
+                <label className={styles.label}>Time (Human Only) (min)</label>
+                <input
+                    type="number"
+                    placeholder="0"
+                    value={humanTime}
+                    onChange={(e) => setHumanTime(e.target.value)}
+                    className={styles.input}
+                    min="0"
+                    required
+                />
+            </div>
+
             <button type="submit" className={styles.button}>Add Task</button>
             <button
                 type="button"
