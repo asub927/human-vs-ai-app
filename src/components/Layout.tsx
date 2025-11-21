@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './Layout.module.css';
+import ChatWidget from './ChatWidget';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -103,6 +104,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div className={styles.content}>
                     {children}
                 </div>
+
+                <ChatWidget />
             </main>
         </div>
     );
