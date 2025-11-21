@@ -41,7 +41,7 @@ This separation provides:
 
 The following diagram illustrates the complete system architecture, showing all layers, components, and their interactions:
 
-![AI Productivity Benchmark Architecture](./architecture-diagram.png)
+![AI Productivity Benchmark Architecture](./architecture-diagram.jpeg)
 
 ### Architecture Components
 
