@@ -32,10 +32,10 @@ const Reports: React.FC = () => {
                         <div style={{ backgroundColor: 'white', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
                             <h3 style={{ color: '#64748b', fontSize: '0.875rem', marginBottom: '8px' }}>Avg. Productivity Gain</h3>
                             <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#10b981' }}>
-                                {Math.round(chartData.reduce((acc, curr) => {
-                                    const gain = curr.humanTime > 0 ? ((curr.humanTime - curr.aiTime) / curr.humanTime) * 100 : 0;
+                                {(chartData.reduce((acc, curr) => {
+                                    const gain = curr.aiTime > 0 ? curr.humanTime / curr.aiTime : 0;
                                     return acc + gain;
-                                }, 0) / (chartData.length || 1))}%
+                                }, 0) / (chartData.length || 1)).toFixed(1)}x
                             </p>
                         </div>
                     </div>

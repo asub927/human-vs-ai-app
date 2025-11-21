@@ -13,9 +13,9 @@ const ProductivityChart: React.FC<ProductivityChartProps> = ({ data }) => {
             if (!groups[d.projectName]) {
                 groups[d.projectName] = [];
             }
-            // Calculate Gain: (Human - AI) / Human * 100
-            // Handle division by zero if Human time is 0 (unlikely but safe)
-            const gain = d.humanTime > 0 ? ((d.humanTime - d.aiTime) / d.humanTime) * 100 : 0;
+            // Calculate Gain: Human Time / AI Time (Multiplier)
+            // e.g. 100 min human / 10 min AI = 10x gain
+            const gain = d.aiTime > 0 ? d.humanTime / d.aiTime : 0;
             groups[d.projectName].push({ task: d.task, gain });
         });
         return groups;
@@ -23,14 +23,14 @@ const ProductivityChart: React.FC<ProductivityChartProps> = ({ data }) => {
 
     const projects = Object.keys(projectData);
 
-    // Colors for different projects
+    // Colors for different projects (Blue variations)
     const colors = [
-        '#8b5cf6', // Violet
-        '#f59e0b', // Amber
+        '#06b6d4', // Cyan
         '#3b82f6', // Blue
-        '#10b981', // Emerald
-        '#ef4444', // Red
-        '#ec4899', // Pink
+        '#1d4ed8', // Dark Blue
+        '#0ea5e9', // Sky Blue
+        '#6366f1', // Indigo
+        '#0f172a', // Slate
     ];
 
     // Chart Dimensions
@@ -44,10 +44,10 @@ const ProductivityChart: React.FC<ProductivityChartProps> = ({ data }) => {
     // X-axis: Task Index (0 to maxTasks - 1)
     const maxTasks = Math.max(...Object.values(projectData).map(arr => arr.length), 1);
 
-    // Y-axis: Gain % (0 to 100, or max gain if > 100)
-    const allGains = data.map(d => d.humanTime > 0 ? ((d.humanTime - d.aiTime) / d.humanTime) * 100 : 0);
-    const maxGain = Math.max(100, ...allGains);
-    const minGain = Math.min(0, ...allGains); // Handle negative gain if AI is slower
+    // Y-axis: Gain (0 to 10x fixed, or max if higher)
+    const allGains = data.map(d => d.aiTime > 0 ? d.humanTime / d.aiTime : 0);
+    const maxGain = Math.max(10, ...allGains); // At least 10x
+    const minGain = 0;
 
     const getX = (index: number) => padding + (index / (maxTasks > 1 ? maxTasks - 1 : 1)) * chartWidth;
     const getY = (gain: number) => height - padding - ((gain - minGain) / (maxGain - minGain)) * chartHeight;
@@ -75,11 +75,11 @@ const ProductivityChart: React.FC<ProductivityChartProps> = ({ data }) => {
             const p2 = points[j + 1];
             const p3 = points[j + 2] || p2;
 
-            const cp1x = p1.x + (p2.x - p0.x) / 6;
-            const cp1y = p1.y + (p2.y - p0.y) / 6;
+            const cp1x = p1.x + (p2.x - p0.x) / 3;
+            const cp1y = p1.y + (p2.y - p0.y) / 3;
 
-            const cp2x = p2.x - (p3.x - p1.x) / 6;
-            const cp2y = p2.y - (p3.y - p1.y) / 6;
+            const cp2x = p2.x - (p3.x - p1.x) / 3;
+            const cp2y = p2.y - (p3.y - p1.y) / 3;
 
             d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
         }
@@ -89,19 +89,20 @@ const ProductivityChart: React.FC<ProductivityChartProps> = ({ data }) => {
 
     return (
         <div style={{
-            backgroundColor: '#0f172a',
+            backgroundColor: 'white',
             borderRadius: '16px',
             padding: '24px',
-            color: 'white',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+            color: '#1e293b',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+            border: '1px solid #e2e8f0'
         }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 600 }}>Productivity Gain by Project</h3>
+                <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 600 }}>Productivity Boost (Projects)</h3>
                 <div style={{ display: 'flex', gap: '16px' }}>
                     {projects.map((project, i) => (
                         <div key={project} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.875rem' }}>
                             <div style={{ width: '12px', height: '4px', borderRadius: '2px', backgroundColor: colors[i % colors.length] }} />
-                            <span style={{ color: '#94a3b8' }}>{project}</span>
+                            <span style={{ color: '#64748b' }}>{project}</span>
                         </div>
                     ))}
                 </div>
@@ -112,8 +113,10 @@ const ProductivityChart: React.FC<ProductivityChartProps> = ({ data }) => {
                     viewBox={`0 0 ${width} ${height}`}
                     style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                 >
-                    {/* Grid Lines (Y-axis) */}
-                    {[0, 25, 50, 75, 100].map(tick => {
+                    {/* Grid Lines (Y-axis) - 0 to 10 */}
+                    {Array.from({ length: 11 }).map((_, i) => {
+                        const tick = i; // 0, 1, 2 ... 10
+                        if (tick > maxGain) return null;
                         const y = getY(tick);
                         return (
                             <g key={tick}>
@@ -122,7 +125,7 @@ const ProductivityChart: React.FC<ProductivityChartProps> = ({ data }) => {
                                     y1={y}
                                     x2={width - padding}
                                     y2={y}
-                                    stroke="#334155"
+                                    stroke="#e2e8f0"
                                     strokeWidth="1"
                                     strokeDasharray="4 4"
                                 />
@@ -133,7 +136,7 @@ const ProductivityChart: React.FC<ProductivityChartProps> = ({ data }) => {
                                     fill="#64748b"
                                     fontSize="12"
                                 >
-                                    {tick}%
+                                    {tick}x
                                 </text>
                             </g>
                         );
@@ -169,19 +172,73 @@ const ProductivityChart: React.FC<ProductivityChartProps> = ({ data }) => {
                         />
                     ))}
 
-                    {/* Dots */}
+                    {/* Median Vertical Line */}
+                    {(() => {
+                        const medianIndex = Math.floor((maxTasks - 1) / 2);
+                        const x = getX(medianIndex);
+                        return (
+                            <g>
+                                <line
+                                    x1={x}
+                                    y1={padding}
+                                    x2={x}
+                                    y2={height - padding}
+                                    stroke="#94a3b8"
+                                    strokeWidth="2"
+                                    strokeDasharray="4 4"
+                                />
+                                <text
+                                    x={x}
+                                    y={padding - 10}
+                                    textAnchor="middle"
+                                    fill="#94a3b8"
+                                    fontSize="12"
+                                >
+                                    Median
+                                </text>
+                            </g>
+                        );
+                    })()}
+
+                    {/* Dots and Labels */}
                     {projects.map((project, i) => (
-                        projectData[project].map((d, idx) => (
-                            <circle
-                                key={`${i}-${idx}`}
-                                cx={getX(idx)}
-                                cy={getY(d.gain)}
-                                r="4"
-                                fill="#0f172a"
-                                stroke={colors[i % colors.length]}
-                                strokeWidth="2"
-                            />
-                        ))
+                        projectData[project].map((d, idx) => {
+                            const isMedian = idx === Math.floor((maxTasks - 1) / 2);
+                            return (
+                                <g key={`${i}-${idx}`}>
+                                    <circle
+                                        cx={getX(idx)}
+                                        cy={getY(d.gain)}
+                                        r={isMedian ? 6 : 4}
+                                        fill="white"
+                                        stroke={colors[i % colors.length]}
+                                        strokeWidth={isMedian ? 3 : 2}
+                                    />
+                                    {isMedian && (
+                                        <g transform={`translate(${getX(idx)}, ${getY(d.gain)})`}>
+                                            <rect
+                                                x="10"
+                                                y="-12"
+                                                width="40"
+                                                height="24"
+                                                rx="4"
+                                                fill={colors[i % colors.length]}
+                                            />
+                                            <text
+                                                x="30"
+                                                y="4"
+                                                textAnchor="middle"
+                                                fill="white"
+                                                fontSize="12"
+                                                fontWeight="bold"
+                                            >
+                                                {d.gain.toFixed(1)}x
+                                            </text>
+                                        </g>
+                                    )}
+                                </g>
+                            );
+                        })
                     ))}
                 </svg>
             </div>
