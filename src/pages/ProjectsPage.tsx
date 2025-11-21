@@ -8,14 +8,16 @@ const ProjectsPage: React.FC = () => {
     const navigate = useNavigate();
     const [isCreating, setIsCreating] = useState(false);
     const [newProjectName, setNewProjectName] = useState('');
+    const [initialTask, setInitialTask] = useState('');
     const [expandedProjectId, setExpandedProjectId] = useState<string | null>(null);
     const [newTaskNames, setNewTaskNames] = useState<{ [key: string]: string }>({});
 
     const handleAddProject = (e: React.FormEvent) => {
         e.preventDefault();
-        if (newProjectName.trim()) {
-            addProject(newProjectName.trim());
+        if (newProjectName.trim() && initialTask.trim()) {
+            addProject(newProjectName.trim(), initialTask.trim());
             setNewProjectName('');
+            setInitialTask('');
             setIsCreating(false);
         }
     };
@@ -71,7 +73,14 @@ const ProjectsPage: React.FC = () => {
                             className={styles.input}
                             autoFocus
                         />
-                        <button type="submit" className={styles.saveButton} disabled={!newProjectName.trim()}>
+                        <input
+                            type="text"
+                            placeholder="Initial Task (Required)"
+                            value={initialTask}
+                            onChange={(e) => setInitialTask(e.target.value)}
+                            className={styles.input}
+                        />
+                        <button type="submit" className={styles.saveButton} disabled={!newProjectName.trim() || !initialTask.trim()}>
                             Save Project
                         </button>
                     </form>

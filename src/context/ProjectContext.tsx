@@ -3,7 +3,7 @@ import { Project } from '../types';
 
 interface ProjectContextType {
     projects: Project[];
-    addProject: (name: string) => void;
+    addProject: (name: string, initialTask: string) => void;
     deleteProject: (id: string) => void;
     addTaskToProject: (projectId: string, taskName: string) => void;
     deleteTaskFromProject: (projectId: string, taskName: string) => void;
@@ -33,11 +33,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({ children }) =>
         localStorage.setItem('projects', JSON.stringify(projects));
     }, [projects]);
 
-    const addProject = (name: string) => {
+    const addProject = (name: string, initialTask: string) => {
         const newProject: Project = {
             id: crypto.randomUUID(),
             name,
-            tasks: []
+            tasks: [initialTask]
         };
         setProjects([...projects, newProject]);
     };
