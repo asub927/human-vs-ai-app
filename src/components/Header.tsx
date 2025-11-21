@@ -37,17 +37,17 @@ const Header: React.FC<HeaderProps> = ({ data }) => {
 
                 {/* Widget 2: Human + AI */}
                 <div className={styles.widgetWrapper}>
-                    <span className={styles.widgetLabel}>Human + AI</span>
+                    <span className={`${styles.widgetLabel} ${styles.widgetLabelAi}`}>Human + AI</span>
                     <div className={`${styles.widget} ${styles.widgetAi}`}>
                         <div className={styles.widgetContent}>
-                            <span className={styles.widgetValue}>{formatTime(totalAiTime)}</span>
+                            <span className={`${styles.widgetValue} ${styles.widgetValueAi}`}>{formatTime(totalAiTime)}</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Widget 3: Productivity Gain */}
                 <div className={styles.widgetWrapper}>
-                    <span className={styles.widgetLabel}>Productivity Gain</span>
+                    <span className={`${styles.widgetLabel} ${styles.widgetLabelGain}`}>Productivity Gain</span>
                     <div className={`${styles.widget} ${styles.widgetGain}`}>
                         <div className={styles.widgetContent}>
                             {totalAiTime > 0 ? (
