@@ -1,4 +1,4 @@
-# Human vs AI Productivity Tracker
+# AI Productivity Benchmark
 
 A modern web application for tracking and visualizing productivity gains when using AI tools compared to traditional human-only workflows. Built with React, TypeScript, and Vite, this application helps teams quantify the impact of AI integration on their development processes.
 
@@ -70,7 +70,7 @@ Before running this application, ensure you have:
 
 ```bash
 git clone <repository-url>
-cd human-vs-ai-app
+cd ai-productivity-benchmark
 ```
 
 ### 2. Install Dependencies
@@ -116,7 +116,7 @@ The application will start on `http://localhost:5173` (default Vite port).
 ## 🏗️ Project Structure
 
 ```
-human-vs-ai-app/
+ai-productivity-benchmark/
 ├── public/              # Static assets
 ├── src/
 │   ├── assets/          # Images, fonts, etc.
@@ -153,13 +153,13 @@ human-vs-ai-app/
 ### Build Docker Image
 
 ```bash
-docker build -t human-vs-ai-app .
+docker build -t ai-productivity-benchmark .
 ```
 
 ### Run Docker Container
 
 ```bash
-docker run -p 8080:8080 human-vs-ai-app
+docker run -p 8080:8080 ai-productivity-benchmark
 ```
 
 Access the application at `http://localhost:8080`
@@ -241,17 +241,17 @@ Service URL: https://human-vs-ai-app-XXXXXXXXXX.us-central1.run.app
 
 ```bash
 # 1. Build and tag the Docker image
-docker build -t gcr.io/YOUR_PROJECT_ID/human-vs-ai-app .
+docker build -t gcr.io/YOUR_PROJECT_ID/ai-productivity-benchmark .
 
 # 2. Configure Docker to use gcloud credentials
 gcloud auth configure-docker
 
 # 3. Push image to Google Container Registry
-docker push gcr.io/YOUR_PROJECT_ID/human-vs-ai-app
+docker push gcr.io/YOUR_PROJECT_ID/ai-productivity-benchmark
 
 # 4. Deploy to Cloud Run
-gcloud run deploy human-vs-ai-app \
-  --image gcr.io/YOUR_PROJECT_ID/human-vs-ai-app \
+gcloud run deploy ai-productivity-benchmark \
+  --image gcr.io/YOUR_PROJECT_ID/ai-productivity-benchmark \
   --platform managed \
   --region us-central1 \
   --allow-unauthenticated
@@ -265,11 +265,11 @@ The `cloudbuild.yaml` file defines the deployment pipeline:
 steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/human-vs-ai-app', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/ai-productivity-benchmark', '.']
 
   # Push to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/human-vs-ai-app']
+    args: ['push', 'gcr.io/$PROJECT_ID/ai-productivity-benchmark']
 
   # Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -277,9 +277,9 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'human-vs-ai-app'
+      - 'ai-productivity-benchmark'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/human-vs-ai-app'
+      - 'gcr.io/$PROJECT_ID/ai-productivity-benchmark'
       - '--region'
       - 'us-central1'
       - '--platform'
@@ -312,8 +312,8 @@ To restrict access to authenticated users only:
 #### Set Memory and CPU Limits
 
 ```bash
-gcloud run deploy human-vs-ai-app \
-  --image gcr.io/YOUR_PROJECT_ID/human-vs-ai-app \
+gcloud run deploy ai-productivity-benchmark \
+  --image gcr.io/YOUR_PROJECT_ID/ai-productivity-benchmark \
   --platform managed \
   --region us-central1 \
   --memory 512Mi \
@@ -329,7 +329,7 @@ gcloud run deploy human-vs-ai-app \
 2. Click "Create Trigger"
 3. Connect your repository (GitHub, Bitbucket, etc.)
 4. Configure trigger settings:
-   - **Name**: `deploy-human-vs-ai-app`
+   - **Name**: `deploy-ai-productivity-benchmark`
    - **Event**: Push to branch
    - **Branch**: `^main$`
    - **Configuration**: Cloud Build configuration file
@@ -350,7 +350,7 @@ gcloud builds log BUILD_ID
 #### View Application Logs
 
 ```bash
-gcloud run services logs read human-vs-ai-app --region us-central1
+gcloud run services logs read ai-productivity-benchmark --region us-central1
 ```
 
 #### Monitor in Console
@@ -394,10 +394,10 @@ Cloud Run will:
 
 ```bash
 # List revisions
-gcloud run revisions list --service human-vs-ai-app --region us-central1
+gcloud run revisions list --service ai-productivity-benchmark --region us-central1
 
 # Route traffic to a specific revision
-gcloud run services update-traffic human-vs-ai-app \
+gcloud run services update-traffic ai-productivity-benchmark \
   --to-revisions REVISION_NAME=100 \
   --region us-central1
 ```
@@ -509,7 +509,7 @@ npx tsc --noEmit
 - Verify Nginx configuration
 
 **Application not loading:**
-- Check Cloud Run logs: `gcloud run services logs read human-vs-ai-app`
+- Check Cloud Run logs: `gcloud run services logs read ai-productivity-benchmark`
 - Verify the service URL is correct
 - Check browser console for errors
 
@@ -542,7 +542,5 @@ For issues, questions, or suggestions:
 - Check the documentation
 
 ---
-
-**Live Demo**: [https://human-vs-ai-app-274526825726.us-central1.run.app](https://human-vs-ai-app-274526825726.us-central1.run.app)
 
 Built with ❤️ using React and TypeScript
