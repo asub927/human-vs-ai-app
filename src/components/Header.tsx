@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styles from './Header.module.css';
-
 import { TaskData } from '../types';
 
 interface HeaderProps {
@@ -28,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ data }) => {
                 {/* Widget 1: Human Only */}
                 <div className={styles.widgetWrapper}>
                     <span className={styles.widgetLabel}>Human Only</span>
-                    <div className={`${styles.widget} ${styles.widgetHuman}`}>
+                    <div className={`${styles.widget} ${styles.widgetHuman} `}>
                         <div className={styles.widgetContent}>
                             <span className={styles.widgetValue}>{formatTime(totalHumanTime)}</span>
                         </div>
@@ -37,18 +36,18 @@ const Header: React.FC<HeaderProps> = ({ data }) => {
 
                 {/* Widget 2: Human + AI */}
                 <div className={styles.widgetWrapper}>
-                    <span className={`${styles.widgetLabel} ${styles.widgetLabelAi}`}>Human + AI</span>
-                    <div className={`${styles.widget} ${styles.widgetAi}`}>
+                    <span className={`${styles.widgetLabel} ${styles.widgetLabelAi} `}>Human + AI</span>
+                    <div className={`${styles.widget} ${styles.widgetAi} `}>
                         <div className={styles.widgetContent}>
-                            <span className={`${styles.widgetValue} ${styles.widgetValueAi}`}>{formatTime(totalAiTime)}</span>
+                            <span className={`${styles.widgetValue} ${styles.widgetValueAi} `}>{formatTime(totalAiTime)}</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Widget 3: Productivity Gain */}
                 <div className={styles.widgetWrapper}>
-                    <span className={`${styles.widgetLabel} ${styles.widgetLabelGain}`}>Productivity Gain</span>
-                    <div className={`${styles.widget} ${styles.widgetGain}`}>
+                    <span className={`${styles.widgetLabel} ${styles.widgetLabelGain} `}>Productivity Gain</span>
+                    <div className={`${styles.widget} ${styles.widgetGain} `}>
                         <div className={styles.widgetContent}>
                             {totalAiTime > 0 ? (
                                 <span className={styles.efficiencyValue}>{speedup}x Faster</span>

@@ -3,10 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
@@ -17,11 +17,11 @@
     "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^6.2.0",
     "@tanstack/react-query": "^5.62.11",
+    "axios": "^1.13.2",
     "bcryptjs": "^2.4.3",
-    "next": "^15.1.6",
-    "next-auth": "^5.0.0-beta.25",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router-dom": "^7.9.6",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -29,10 +29,11 @@
     "@types/node": "^22.10.5",
     "@types/react": "^19.0.6",
     "@types/react-dom": "^19.0.3",
+    "@vitejs/plugin-react": "^5.1.1",
     "eslint": "^9.18.0",
-    "eslint-config-next": "^15.1.6",
     "prisma": "^6.2.0",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vite": "^7.2.4"
   }
 }

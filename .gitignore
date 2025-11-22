@@ -1,7 +1,5 @@
 # Dependencies
 node_modules
-.pnp
-.pnp.js
 
 # Testing
 coverage
@@ -11,30 +9,19 @@ coverage
 out/
 build
 
+# Backend (NestJS)
+backend/dist
+backend/coverage
+
 # Production
 dist
-dist-ssr
 
-# Misc
-.DS_Store
-*.pem
-
-# Debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# Local env files
+# Environment Variables
+.env
+.env.production
+.env.development
+.env.test
 .env*.local
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Vercel
-.vercel
 
 # TypeScript
 *.tsbuildinfo
@@ -43,6 +30,25 @@ next-env.d.ts
 # Prisma
 prisma/*.db
 prisma/*.db-journal
+backend/prisma/migrations
+
+# Docker
+docker-compose.override.yml
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Legacy code (moved during migration)
+src_legacy/
+lib_legacy/
+
+# Backend specific
+backend/.env
+backend/node_modules
+backend/dist
 
 # Editor directories and files
 .vscode/*
@@ -53,3 +59,11 @@ prisma/*.db-journal
 *.njsproj
 *.sln
 *.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Security
+*.pem
+

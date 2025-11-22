@@ -1,5 +1,12 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+
+
+import React, { createContext, useContext, ReactNode } from 'react';
 import { Project, TaskData } from '../types';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { useAuth } from './AuthContext';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 interface ProjectContextType {
     projects: Project[];
@@ -23,73 +30,120 @@ export const useProjects = () => {
     return context;
 };
 
-interface ProjectProviderProps {
-    children: ReactNode;
-}
+export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const { token } = useAuth();
+    const queryClient = useQueryClient();
 
-export const ProjectProvider: React.FC<ProjectProviderProps> = ({ children }) => {
-    const [projects, setProjects] = useState<Project[]>(() => {
-        const savedProjects = localStorage.getItem('projects');
-        return savedProjects ? JSON.parse(savedProjects) : [];
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+    // Fetch Projects
+    const { data: projects = [] } = useQuery({
+        queryKey: ['projects'],
+        queryFn: async () => {
+            if (!token) return [];
+            const res = await axios.get(`${API_URL}/projects`, { headers });
+            // Map backend response: backend Project has taskNames, frontend expects tasks (string[])
+            return res.data.map((p: any) => ({
+                ...p,
+                tasks: p.taskNames || []
+            }));
+        },
+        enabled: !!token
     });
 
-    const [chartData, setChartData] = useState<TaskData[]>(() => {
-        const savedData = localStorage.getItem('chartData');
-        return savedData ? JSON.parse(savedData) : [];
+    // Fetch Chart Data (Tasks)
+    const { data: chartData = [] } = useQuery({
+        queryKey: ['tasks'],
+        queryFn: async () => {
+            if (!token) return [];
+            const res = await axios.get(`${API_URL}/tasks`, { headers });
+            // Map backend Task to TaskData
+            return res.data.map((t: any) => ({
+                id: t.id,
+                projectName: t.project?.name || 'Unknown',
+                task: t.name,
+                humanTime: t.humanTime,
+                aiTime: t.aiTime
+            }));
+        },
+        enabled: !!token
     });
 
-    useEffect(() => {
-        localStorage.setItem('projects', JSON.stringify(projects));
-    }, [projects]);
+    // Mutations
+    const addProjectMutation = useMutation({
+        mutationFn: async ({ name, initialTask }: { name: string, initialTask: string }) => {
+            await axios.post(`${API_URL}/projects`, { name, taskNames: [initialTask] }, { headers });
+        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['projects'] })
+    });
 
-    useEffect(() => {
-        localStorage.setItem('chartData', JSON.stringify(chartData));
-    }, [chartData]);
+    const deleteProjectMutation = useMutation({
+        mutationFn: async (id: string) => {
+            await axios.delete(`${API_URL}/projects/${id}`, { headers });
+        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['projects'] })
+    });
 
-    const addProject = (name: string, initialTask: string) => {
-        const newProject: Project = {
-            id: crypto.randomUUID(),
-            name,
-            tasks: [initialTask]
-        };
-        setProjects([...projects, newProject]);
-    };
+    const addTaskToProjectMutation = useMutation({
+        mutationFn: async ({ projectId, taskName }: { projectId: string, taskName: string }) => {
+            // Using a specific endpoint for adding task definition
+            await axios.post(`${API_URL}/projects/${projectId}/tasks/definition`, { name: taskName }, { headers });
+        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['projects'] })
+    });
 
-    const deleteProject = (id: string) => {
-        setProjects(projects.filter(p => p.id !== id));
-    };
+    const deleteTaskFromProjectMutation = useMutation({
+        mutationFn: async ({ projectId, taskName }: { projectId: string, taskName: string }) => {
+            await axios.delete(`${API_URL}/projects/${projectId}/tasks/definition/${encodeURIComponent(taskName)}`, { headers });
+        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['projects'] })
+    });
 
-    const addTaskToProject = (projectId: string, taskName: string) => {
-        setProjects(projects.map(p => {
-            if (p.id === projectId) {
-                // Prevent duplicate tasks
-                if (p.tasks.includes(taskName)) return p;
-                return { ...p, tasks: [...p.tasks, taskName] };
-            }
-            return p;
-        }));
-    };
+    const addChartDataMutation = useMutation({
+        mutationFn: async (data: TaskData) => {
+            // Find project by name to get ID
+            const project = projects.find((p: Project) => p.name === data.projectName);
+            if (!project) throw new Error(`Project '${data.projectName}' not found`);
 
-    const deleteTaskFromProject = (projectId: string, taskName: string) => {
-        setProjects(projects.map(p => {
-            if (p.id === projectId) {
-                return { ...p, tasks: p.tasks.filter(t => t !== taskName) };
-            }
-            return p;
-        }));
-    };
+            await axios.post(`${API_URL}/tasks`, {
+                name: data.task,
+                humanTime: data.humanTime,
+                aiTime: data.aiTime,
+                projectId: project.id
+            }, { headers });
+        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] })
+    });
 
-    const addChartData = (data: TaskData) => {
-        setChartData([...chartData, data]);
-    };
+    const deleteChartDataMutation = useMutation({
+        mutationFn: async (id: string) => {
+            await axios.delete(`${API_URL}/tasks/${id}`, { headers });
+        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] })
+    });
+
+    const clearChartDataMutation = useMutation({
+        mutationFn: async () => {
+            await axios.delete(`${API_URL}/tasks`, { headers });
+        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] })
+    });
+
+    // Wrappers
+    const addProject = (name: string, initialTask: string) => addProjectMutation.mutate({ name, initialTask });
+    const deleteProject = (id: string) => deleteProjectMutation.mutate(id);
+    const addTaskToProject = (projectId: string, taskName: string) => addTaskToProjectMutation.mutate({ projectId, taskName });
+    const deleteTaskFromProject = (projectId: string, taskName: string) => deleteTaskFromProjectMutation.mutate({ projectId, taskName });
+    const addChartData = (data: TaskData) => addChartDataMutation.mutate(data);
 
     const deleteChartData = (index: number) => {
-        setChartData(chartData.filter((_, i) => i !== index));
+        const task = chartData[index];
+        if (task && task.id) {
+            deleteChartDataMutation.mutate(task.id);
+        }
     };
 
-    const clearChartData = () => {
-        setChartData([]);
-    };
+    const clearChartData = () => clearChartDataMutation.mutate();
 
     return (
         <ProjectContext.Provider value={{

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import ChatMessage from './ChatMessage';
-import ChatActionOptions from './ChatActionOptions';
-import { useChat } from '../hooks/useChat';
+import ChatMessage from '../components/ChatMessage';
+import ChatActionOptions from '../components/ChatActionOptions';
+import { useChat } from '@/hooks/useChat';
 import { useProjects } from '../context/ProjectContext';
 
 interface ChatWindowProps {

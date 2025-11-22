@@ -1,10 +1,10 @@
 /// <reference types="vite/client" />
-declare module '*.module.css' {
-    const classes: { [key: string]: string };
-    export default classes;
+
+interface ImportMetaEnv {
+    readonly VITE_API_URL?: string
+    readonly VITE_GEMINI_API_KEY?: string
 }
 
-declare module '*.css' {
-    const content: { [key: string]: string };
-    export default content;
+interface ImportMeta {
+    readonly env: ImportMetaEnv
 }

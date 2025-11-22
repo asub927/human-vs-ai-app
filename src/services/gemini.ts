@@ -11,7 +11,7 @@ export const generateResponse = async (history: { role: 'user' | 'model', text: 
     if (!API_KEY) {
         // Mock response if no key is provided
         await new Promise(resolve => setTimeout(resolve, 1000));
-        return "I'm a demo AI assistant! To make me real, please add a VITE_GEMINI_API_KEY to your .env file.";
+        return "I'm a demo AI assistant! To make me real, please add a GEMINI_API_KEY to your .env.local file.";
     }
 
     try {

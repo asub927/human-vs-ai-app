@@ -1,52 +1,45 @@
 {
     "compilerOptions": {
         "target": "ES2020",
+        "useDefineForClassFields": true,
         "lib": [
             "ES2020",
             "DOM",
             "DOM.Iterable"
         ],
-        "jsx": "preserve",
         "module": "ESNext",
-        "moduleResolution": "bundler",
-        "resolveJsonModule": true,
-        "allowJs": true,
-        "strict": true,
-        "noEmit": true,
-        "esModuleInterop": true,
         "skipLibCheck": true,
-        "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": true,
+        /* Bundler mode */
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
         "isolatedModules": true,
-        "incremental": true,
-        "plugins": [
-            {
-                "name": "next"
-            }
-        ],
+        "noEmit": true,
+        "jsx": "react-jsx",
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
         "paths": {
             "@/*": [
-                "./*"
-            ],
-            "@/components/*": [
-                "./components/*"
-            ],
-            "@/lib/*": [
-                "./lib/*"
-            ],
-            "@/app/*": [
-                "./app/*"
+                "./src/*"
             ]
         }
     },
     "include": [
-        "next-env.d.ts",
-        "**/*.ts",
-        "**/*.tsx",
-        ".next/types/**/*.ts"
+        "src"
     ],
     "exclude": [
         "node_modules",
-        "dist"
+        "dist",
+        "backend",
+        "src_legacy",
+        "lib_legacy"
+    ],
+    "references": [
+        {
+            "path": "./tsconfig.node.json"
+        }
     ]
 }

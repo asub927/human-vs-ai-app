@@ -1,0 +1,105 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-bg-app);
+    padding: var(--space-md);
+}
+
+.card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--color-border);
+    max-width: 480px;
+    width: 100%;
+}
+
+.title {
+    font-family: var(--font-serif);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--color-text-main);
+    line-height: 1.2;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-xs);
+}
+
+.human {
+    color: var(--color-text-main);
+}
+
+.vs {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-text-secondary);
+    font-size: var(--text-lg);
+    margin: 0 var(--space-xs);
+}
+
+.ai {
+    color: var(--color-secondary);
+}
+
+.subtitle {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-weight: var(--font-normal);
+    margin-bottom: var(--space-xl);
+}
+
+.providers {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.providerButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: var(--font-medium);
+    color: var(--color-text-main);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.providerButton:hover:not(:disabled) {
+    border-color: var(--color-secondary);
+    background: #F0F9FF;
+    /* Light cyan tint */
+    color: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.providerButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+}
+
+.loading {
+    text-align: center;
+    margin-top: var(--space-lg);
+    color: var(--color-secondary);
+    font-weight: var(--font-medium);
+}

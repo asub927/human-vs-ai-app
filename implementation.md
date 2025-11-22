@@ -1,5 +1,24 @@
 # Full-Stack Implementation Plan: AI Productivity Benchmark
 
+> [!CAUTION]
+> **MANDATORY RULE: ARCHITECTURAL CHANGE APPROVAL**
+> 
+> Any deviation from the architecture specified in this document MUST be approved by the user before implementation. This includes but is not limited to:
+> - Changing frontend framework (e.g., Vite → Next.js, React → Vue)
+> - Changing backend framework (e.g., NestJS → Express)
+> - Changing database (e.g., PostgreSQL → MongoDB)
+> - Changing authentication method (e.g., Passport → Auth0)
+> - Changing deployment strategy (e.g., Docker → Serverless)
+> - Adding or removing major dependencies
+> 
+> **Process for architectural changes:**
+> 1. STOP implementation immediately
+> 2. Document the proposed change and rationale
+> 3. Request explicit user approval via `notify_user`
+> 4. Wait for user confirmation before proceeding
+> 
+> **Violation of this rule invalidates the implementation and requires rollback.**
+
 ## Overview
 
 Transform the current client-side React application into a comprehensive full-stack application with:
@@ -1557,17 +1576,17 @@ Seed script for development data:
 
 ### Phase 3: Frontend Component Migration
 
-Since we're using Next.js, the frontend components need minimal changes. The main work is migrating from Vite to Next.js structure.
+The frontend components remain in the existing Vite structure. The main work is updating API calls to use the new NestJS backend.
 
-#### [MODIFY] [components/](file:///Users/aaranvi/dev/ai/antigravity-demo/human-vs-ai-app/components/)
+#### [KEEP] [src/components/](file:///Users/aaranvi/dev/ai/antigravity-demo/human-vs-ai-app/src/components/)
 
-Move all existing components from `src/components/` to `components/` at root level:
+Keep all existing components in `src/components/`:
 - Keep all existing component files unchanged
 - Keep all CSS modules unchanged
-- Components work identically in Next.js
+- Components work identically with Vite
 - No design changes needed
 
-#### [MODIFY] [src/context/ProjectContext.tsx](file:///Users/aaranvi/dev/ai/antigravity-demo/human-vs-ai-app/src/context/ProjectContext.tsx) → [context/ProjectContext.tsx](file:///Users/aaranvi/dev/ai/antigravity-demo/human-vs-ai-app/context/ProjectContext.tsx)
+#### [MODIFY] [src/context/ProjectContext.tsx](file:///Users/aaranvi/dev/ai/antigravity-demo/human-vs-ai-app/src/context/ProjectContext.tsx)
 
 Replace localStorage with API calls:
 - Use `fetch` or `axios` to call `/api/experience/projects` and `/api/experience/tasks`
@@ -1860,72 +1879,25 @@ COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Build Next.js (standalone output for minimal image size)
-ENV NEXT_TELEMETRY_DISABLED 1
+# Build Vite application
 RUN npm run build
 
-# Production image - minimal size
-FROM base AS runner
-WORKDIR /app
+# Production image - Nginx to serve static files
+FROM nginx:alpine AS runner
+WORKDIR /usr/share/nginx/html
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+# Copy built files from builder
+COPY --from=builder /app/dist ./
 
-# Create non-root user for security
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-# Copy necessary files
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-
-USER nextjs
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080
 
 # Health check endpoint
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:8080/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+  CMD wget --quiet --tries=1 --spider http://localhost:8080/ || exit 1
 
-ENV PORT 8080
-ENV HOSTNAME "0.0.0.0"
-
-CMD ["node", "server.js"]
-```
-
-#### [NEW] [app/api/health/route.ts](file:///Users/aaranvi/dev/ai/antigravity-demo/human-vs-ai-app/app/api/health/route.ts)
-
-Health check endpoint for container orchestration:
-
-```typescript
-import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/data/prisma';
-
-export async function GET() {
-  try {
-    // Check database connection
-    await prisma.$queryRaw`SELECT 1`;
-    
-    return NextResponse.json({
-      status: 'healthy',
-      timestamp: new Date().toISOString(),
-      database: 'connected',
-      agents: 'initialized'
-    });
-  } catch (error) {
-    return NextResponse.json(
-      {
-        status: 'unhealthy',
-        error: error.message
-      },
-      { status: 503 }
-    );
-  }
-}
-```
 
 ---
 
@@ -2327,24 +2299,9 @@ ENV HOSTNAME "0.0.0.0"
 CMD ["node", "server.js"]
 ```
 
-#### [MODIFY] [next.config.js](file:///Users/aaranvi/dev/ai/antigravity-demo/human-vs-ai-app/next.config.js)
-
-Add production configuration:
-```javascript
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: 'standalone', // For Docker deployment
-  experimental: {
-    serverActions: true,
-  },
-}
-
-module.exports = nextConfig
-```
-
 #### [MODIFY] [cloudbuild.yaml](file:///Users/aaranvi/dev/ai/antigravity-demo/human-vs-ai-app/cloudbuild.yaml)
 
-Update for Next.js deployment with Cloud SQL:
+Update for Vite deployment with Cloud SQL:
 ```yaml
 steps:
   # Build the container image

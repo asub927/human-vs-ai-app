@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { InputFormProps, TaskData } from '../types';
+import { TaskData, InputFormProps } from '../types';
 import { useProjects } from '../context/ProjectContext';
 import styles from './InputForm.module.css';
 import { Link } from 'react-router-dom';
@@ -66,7 +66,7 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
                         </select>
                     ) : (
                         <div className={styles.noProjects}>
-                            <Link to="/projects" className={styles.link}>Create a Project first</Link>
+                            <Link href="/projects" className={styles.link}>Create a Project first</Link>
                         </div>
                     )}
                 </div>
@@ -92,7 +92,7 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
                         placeholder="Enter time in minutes"
                         value={aiTime}
                         onChange={(e) => setAiTime(e.target.value)}
-                        className={`${styles.input} ${styles.inputAi}`}
+                        className={`${styles.input} ${styles.inputAi} `}
                         min="0"
                         required
                     />
@@ -104,7 +104,7 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
                         placeholder="Enter time in minutes"
                         value={humanTime}
                         onChange={(e) => setHumanTime(e.target.value)}
-                        className={`${styles.input} ${styles.inputHuman}`}
+                        className={`${styles.input} ${styles.inputHuman} `}
                         min="0"
                         required
                     />
@@ -115,7 +115,7 @@ const InputForm: React.FC<InputFormProps> = ({ onAddTask, onClear }) => {
                 <button type="submit" className={styles.button} disabled={!selectedProjectId || !task}>Add Task</button>
                 <button
                     type="button"
-                    className={`${styles.button} ${styles.clearButton}`}
+                    className={`${styles.button} ${styles.clearButton} `}
                     onClick={onClear}
                 >
                     Clear All

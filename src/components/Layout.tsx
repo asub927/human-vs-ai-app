@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './Layout.module.css';
 import ChatWidget from './ChatWidget';
 
@@ -9,6 +10,8 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const [isCollapsed, setIsCollapsed] = React.useState(false);
+    const location = useLocation();
+    const pathname = location.pathname;
 
     const toggleSidebar = () => {
         setIsCollapsed(!isCollapsed);
@@ -37,11 +40,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     </button>
                 </div>
                 <nav className={styles.nav}>
-                    <NavLink
+                    <Link
                         to="/"
-                        className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
+                        className={`${styles.navItem} ${pathname === '/' ? styles.navItemActive : ''}`}
                         title="Dashboard"
-                        end
                     >
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <rect x="3" y="3" width="7" height="7"></rect>
@@ -50,10 +52,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                             <rect x="3" y="14" width="7" height="7"></rect>
                         </svg>
                         {!isCollapsed && <span>Dashboard</span>}
-                    </NavLink>
-                    <NavLink
+                    </Link>
+                    <Link
                         to="/reports"
-                        className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
+                        className={`${styles.navItem} ${pathname === '/reports' ? styles.navItemActive : ''}`}
                         title="Reports"
                     >
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -64,17 +66,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                             <polyline points="10 9 9 9 8 9"></polyline>
                         </svg>
                         {!isCollapsed && <span>Reports</span>}
-                    </NavLink>
-                    <NavLink
+                    </Link>
+                    <Link
                         to="/projects"
-                        className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
+                        className={`${styles.navItem} ${pathname === '/projects' ? styles.navItemActive : ''}`}
                         title="Projects"
                     >
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                         </svg>
                         {!isCollapsed && <span>Projects</span>}
-                    </NavLink>
+                    </Link>
                 </nav>
             </aside>
 

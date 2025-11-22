@@ -1,26 +1,34 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import Dashboard from './pages/Dashboard';
-import Reports from './pages/Reports';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { AuthProvider } from './context/AuthContext'
+import { ProjectProvider } from './context/ProjectContext'
+import DashboardPage from './pages/Dashboard'
+import LoginPage from './pages/Login'
+import ProjectsPage from './pages/Projects'
+import ReportsPage from './pages/Reports'
+import AuthCallbackPage from './pages/AuthCallback'
 
-import { ProjectProvider } from './context/ProjectContext';
-import ProjectsPage from './pages/ProjectsPage';
+const queryClient = new QueryClient()
 
-const App: React.FC = () => {
+function App() {
     return (
-        <ProjectProvider>
+        <QueryClientProvider client={queryClient}>
             <BrowserRouter>
-                <Layout>
-                    <Routes>
-                        <Route path="/" element={<Dashboard />} />
-                        <Route path="/reports" element={<Reports />} />
-                        <Route path="/projects" element={<ProjectsPage />} />
-                    </Routes>
-                </Layout>
+                <AuthProvider>
+                    <ProjectProvider>
+                        <Routes>
+                            <Route path="/login" element={<LoginPage />} />
+                            <Route path="/auth/callback" element={<AuthCallbackPage />} />
+                            <Route path="/" element={<DashboardPage />} />
+                            <Route path="/projects" element={<ProjectsPage />} />
+                            <Route path="/reports" element={<ReportsPage />} />
+                            <Route path="*" element={<Navigate to="/" replace />} />
+                        </Routes>
+                    </ProjectProvider>
+                </AuthProvider>
             </BrowserRouter>
-        </ProjectProvider>
-    );
+        </QueryClientProvider>
+    )
 }
 
-export default App;
+export default App

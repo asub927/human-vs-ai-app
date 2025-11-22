@@ -1,38 +1,39 @@
-import React, { useState } from 'react';
-import { TaskData } from '../types';
-import { useProjects } from '../context/ProjectContext';
-import Header from '../components/Header';
-import InputForm from '../components/InputForm';
-import Chart from '../components/Chart';
-import ConfirmationModal from '../components/ConfirmationModal';
+import { useState } from 'react'
+import { TaskData } from '../types'
+import { useProjects } from '../context/ProjectContext'
+import Header from '../components/Header'
+import InputForm from '../components/InputForm'
+import Chart from '../components/Chart'
+import ConfirmationModal from '../components/ConfirmationModal'
+import Layout from '../components/Layout'
 
-const Dashboard: React.FC = () => {
-    const { chartData, addChartData, deleteChartData, clearChartData } = useProjects();
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+export default function DashboardPage() {
+    const { chartData, addChartData, deleteChartData, clearChartData } = useProjects()
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
     const handleAddTask = (newTask: TaskData): void => {
-        addChartData(newTask);
-    };
+        addChartData(newTask)
+    }
 
     const handleDeleteTask = (index: number): void => {
-        deleteChartData(index);
-    };
+        deleteChartData(index)
+    }
 
     const handleClearClick = (): void => {
-        setIsModalOpen(true);
-    };
+        setIsModalOpen(true)
+    }
 
     const handleConfirmClear = (): void => {
-        clearChartData();
-        setIsModalOpen(false);
-    };
+        clearChartData()
+        setIsModalOpen(false)
+    }
 
     const handleCloseModal = (): void => {
-        setIsModalOpen(false);
-    };
+        setIsModalOpen(false)
+    }
 
     return (
-        <>
+        <Layout>
             <Header data={chartData} />
             <InputForm onAddTask={handleAddTask} onClear={handleClearClick} />
             <Chart data={chartData} onDeleteTask={handleDeleteTask} />
@@ -42,8 +43,6 @@ const Dashboard: React.FC = () => {
                 onConfirm={handleConfirmClear}
                 message="Are you sure you want to clear all tasks?"
             />
-        </>
-    );
+        </Layout>
+    )
 }
-
-export default Dashboard;
