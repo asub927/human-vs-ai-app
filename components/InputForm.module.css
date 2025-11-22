@@ -1,0 +1,164 @@
+.form {
+    background: var(--color-surface);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    margin-bottom: 2rem;
+}
+
+.inputsContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+
+.input,
+.select {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-app);
+    /* Matching the light gray in the image */
+    color: var(--color-text-main);
+    font-size: 0.9rem;
+    width: 100%;
+    transition: all 0.2s;
+    text-align: center;
+    /* Centered text as per image placeholders */
+}
+
+.select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+    text-align-last: center;
+    /* Center select text */
+}
+
+.input:focus,
+.select:focus {
+    outline: none;
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 2px rgba(0, 169, 224, 0.2);
+    background: var(--color-surface);
+}
+
+.input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.inputAi {
+    color: var(--color-secondary);
+    font-weight: 600;
+}
+
+.inputAi:focus {
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 2px rgba(0, 169, 224, 0.2);
+}
+
+.inputHuman {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.inputHuman:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(5, 28, 44, 0.2);
+}
+
+.buttonsContainer {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    /* Centered buttons */
+    margin-top: 2rem;
+}
+
+.button {
+    padding: 0.75rem 2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    background: var(--color-primary);
+    color: white;
+    min-width: 120px;
+    font-size: 1rem;
+}
+
+.button:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.clearButton {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-main);
+}
+
+.clearButton:hover {
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+    background: rgba(211, 47, 47, 0.05);
+}
+
+.error {
+    color: var(--color-danger);
+    font-size: 0.875rem;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.noProjects {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    border: 1px dashed var(--color-border);
+    background: var(--color-bg-app);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.link {
+    color: var(--color-secondary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .inputsContainer {
+        grid-template-columns: 1fr;
+    }
+}
